@@ -36,7 +36,7 @@ def main():
             instance_data_dir = f"{base_dir}/{category}/test/{defect}"
             class_data_dir = f"{base_dir}/{category}/test/{defect}"
             mask_data_dir = f"{base_dir}/{category}/ground_truth/{defect}"
-            output_dir = f"./model/{args.output_name}_noise_{args.text_noise_scale}_0.33/{category}/{defect}"
+            output_dir = f"./model/{args.output_name}_noise_{args.text_noise_scale}/{category}/{defect}"
 
             command = (
                 f"accelerate launch train_dreambooth_noise.py "
