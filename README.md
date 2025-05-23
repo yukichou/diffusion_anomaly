@@ -87,10 +87,20 @@ GeoAware-SC is used to compute **keypoint matches between normal and defective i
 git clone https://github.com/Junyi42/GeoAware-SC.git
 ```
 
-2. Place `CAMA_matching.py` inside the cloned folder:
+2. Add the Matching Script
+
+Move the `CAMA_matching.py` file into the cloned folder:
+
 ```
 GeoAware-SC/CAMA_matching.py
 ```
+
+Example command:
+
+```bash
+mv CAMA_matching.py GeoAware-SC/CAMA_matching.py
+```
+
 
 3. Follow GeoAware-SC setup guide (e.g., install dependencies).
 
