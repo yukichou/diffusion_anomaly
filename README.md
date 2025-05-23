@@ -38,10 +38,10 @@ pip install -e .
 5. Add the custom pipeline:  
 Place `pipeline_stable_diffusion_inpaint_magic.py` in:
 ```
-diffusers/scr/diffusers/pipelines/stable_diffusion/
+diffusers/src/diffusers/pipelines/stable_diffusion/
 ```
 
-mv pipeline_stable_diffusion_inpaint_magic.py diffusers/scr/diffusers/pipelines/stable_diffusion/
+mv pipeline_stable_diffusion_inpaint_magic.py diffusers/src/diffusers/pipelines/stable_diffusion/
 
 ---
 
