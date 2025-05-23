@@ -125,7 +125,7 @@ To train on the screw category:
 ```bash
 python run_train.py \
   --base_dir /path/to/mvtec_ad \
-  --output_name /path/to/save/ckpt \
+  --output_name output_name \
   --text_noise_scale 1.0 \
   --category screw
 ```
