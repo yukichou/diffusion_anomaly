@@ -1,0 +1,12 @@
+GeoAware-SC Repository License Status
+
+As of now, the GitHub repository for GeoAware-SC (https://github.com/Junyi42/GeoAware-SC) does not contain a LICENSE file or any stated license terms.
+
+Therefore, this code is considered "all rights reserved" by default. You are not legally permitted to:
+- Copy or redistribute the code
+- Modify or reuse it in your own codebase
+- Publish results derived directly from this code without permission
+
+Please contact the authors of the repository to request permission if needed.
+
+This project does not include any portion of GeoAware-SC code or model weights.

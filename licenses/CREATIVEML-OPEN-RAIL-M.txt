@@ -1,0 +1,16 @@
+CreativeML Open RAIL-M License
+Version 1.0 — August 2022
+
+Copyright (c) 2022 Stability AI and CompVis
+
+Permission is hereby granted, free of charge, to use, copy, modify, and distribute this model and its outputs, subject to the following conditions:
+
+1. You may not use the model or its outputs:
+   - For unlawful, harmful, or discriminatory purposes
+   - To generate or spread misinformation
+   - For biometric surveillance or facial recognition
+
+2. You must include this license with any redistribution
+3. You must attribute the original creators (Stability AI, CompVis)
+
+Full license: https://huggingface.co/spaces/CompVis/stable-diffusion-license
