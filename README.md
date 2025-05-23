@@ -35,15 +35,20 @@ cd diffusers
 pip install -e .
 ```
 
-5. Add the custom pipeline:  
-Place `pipeline_stable_diffusion_inpaint_magic.py` in:
+5. Add the Custom Pipeline
+
+Copy the `pipeline_stable_diffusion_inpaint_magic.py` file to the following directory:
+
 ```
 diffusers/src/diffusers/pipelines/stable_diffusion/
 ```
 
-mv pipeline_stable_diffusion_inpaint_magic.py diffusers/src/diffusers/pipelines/stable_diffusion/
+Example command:
 
----
+```bash
+mv pipeline_stable_diffusion_inpaint_magic.py diffusers/src/diffusers/pipelines/stable_diffusion/
+```
+
 
 ## 📦 Data Preparation
 
