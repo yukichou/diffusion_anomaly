@@ -38,7 +38,7 @@ def parse_args():
                         help="Apply anomaly_strength only for the first <N> steps.")  
     parser.add_argument("--normal_masks", type=str, default="./normal_masks",
                         help="Folder containing object masks for normal images.")
-    parser.add_argument("--mask_dir", type=str,
+    parser.add_argument("--mask_dir", type=str, default="./anomaly_mask",
                         help="Directory that stores pre-generated binary masks.")
     parser.add_argument("--base_dir", type=str, default="./mvtecad",
                         help="Directory that stores mvtecad datasets.")
