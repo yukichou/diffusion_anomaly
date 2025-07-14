@@ -1,4 +1,6 @@
-# README.md
+# MAGIC: Mask-Guided Diffusion Inpainting with Multi-Level Perturbations and Context-Aware Alignment for Few-Shot Anomaly Generation
+
+[![arXiv](https://img.shields.io/badge/arXiv-2407.02286-b31b1b.svg)](https://arxiv.org/abs/2407.02286)
 
 ## Main Pipeline Overview
 
