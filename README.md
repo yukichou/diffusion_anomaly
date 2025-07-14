@@ -5,7 +5,9 @@
 ## Main Pipeline Overview
 
 This repository provides a training and inference pipeline based on Stable Diffusion Inpainting, which serves as the **core method** proposed in our work. The pipeline includes modules for data preparation, semantic correspondence matching, and foreground-aware mask guidance.
-
+<p align="center">
+  <img src="assets/main_framework.png" alt="MAGIC Framework Overview" width="800"/>
+</p>
 ---
 
 ## 🔧 Environment Setup (Main Inpainting Model)
