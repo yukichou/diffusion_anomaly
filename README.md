@@ -215,5 +215,6 @@ This code is licensed for **academic research and non-commercial use only**.
 - You may use, modify, and distribute this code **for academic or educational purposes**.
 - **Commercial use is strictly prohibited** without explicit written permission from the authors.
 - If you use this code in your research, please cite our paper.
+- This work is licensed under the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License. See https://creativecommons.org/licenses/by-nc/4.0/ for details.
 
 © Jae Hyuck Choi, 2025
