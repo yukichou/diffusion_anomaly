@@ -8,7 +8,6 @@ This repository provides a training and inference pipeline based on Stable Diffu
 <p align="center">
   <img src="assets/main_framework.png" alt="MAGIC Framework Overview" width="800"/>
 </p>
----
 
 ## 🔧 Environment Setup (Main Inpainting Model)
 
