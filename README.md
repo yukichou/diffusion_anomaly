@@ -138,6 +138,7 @@ python inference.py \
   --model_ckpt_root /path/to/trained/ckpt \
   --categories screw \
   --text_noise_scale 1.0 \
+  --defect_json /path/to/defect_classification.json \
   --match_json /path/to/matching_result.json \
   --normal_masks /obj_foreground_mask \
   --mask_dir /anomaly_mask \
