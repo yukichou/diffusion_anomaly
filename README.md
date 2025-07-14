@@ -196,12 +196,20 @@ python test-classification.py \
 > All scripts are located under the `evaluation/` directory. Replace each path with the appropriate location of your data or checkpoints.
 
 
-
-
-
 ## 📁 License Files
 
 See the `licenses/` folder:
 - `CREATIVEML-OPEN-RAIL-M.txt` — Stable Diffusion v2  
 - `GEOAWARE-NOTICE.txt` — GeoAware-SC (no license specified)  
 - `LICENSE_U2NET.txt` — U-2-Net (Apache 2.0)
+
+
+## 📄 License
+
+This code is licensed for **academic research and non-commercial use only**.
+
+- You may use, modify, and distribute this code **for academic or educational purposes**.
+- **Commercial use is strictly prohibited** without explicit written permission from the authors.
+- If you use this code in your research, please cite our paper.
+
+© Jae Hyuck Choi, 2025
