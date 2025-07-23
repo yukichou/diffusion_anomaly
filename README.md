@@ -177,7 +177,6 @@ python cal_ic_lpips.py --mvtec_path=/path/to/mvtec_ad --gen_path=/path/to/genera
 
 ### 3. **Classification Training** (`train-classification.py`)
 
-Trains a ResNet-34 classifier to verify how well generated anomalies are distinguishable from normal samples.
 
 ```bash
 python train-classification.py \
