@@ -92,8 +92,8 @@ python CAMA_matching.py \
   --mvtecad_dir /path/to/mvtec_ad \
   --categories screw \
   --img_size 480 \
-  --out_dir ./matching_output \
-  --mask_root /obj_foreground_mask
+  --out_dir /path/to/matching_output \
+  --mask_root /path/to/obj_foreground_mask
 ```
 
 > Replace `screw` with the desired category name.  
@@ -121,9 +121,9 @@ python inference.py \
   --categories screw \
   --text_noise_scale 1.0 \
   --defect_json /path/to/defect_classification.json \
-  --match_json /path/to/matching_result.json \
-  --normal_masks /obj_foreground_mask \
-  --mask_dir /anomaly_mask \
+  --match_json /path/to/matching_output \
+  --normal_masks /path/to//obj_foreground_mask \
+  --mask_dir /path/to/anomaly_mask \
   --anomaly_stop_step 20 \
   --CAMA \
   --base_dir /path/to/mvtec_ad \

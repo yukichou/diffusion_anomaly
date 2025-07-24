@@ -1,0 +1,105 @@
+{
+    "bottle": {
+        "broken_large": 0,
+        "broken_small": 0,
+        "contamination": 0
+    },
+    "cable": {
+        "bent_wire": 1,
+        "cable_swap": 1,
+        "combined": 1,
+        "cut_inner_insulation": 1,
+        "cut_outer_insulation": 1,
+        "missing_cable": 1,
+        "missing_wire": 1,
+        "poke_insulation": 1
+    },
+    "capsule": {
+        "crack": 0,
+        "faulty_imprint": 0,
+        "poke": 0,
+        "scratch": 0,
+        "squeeze": 1
+    },
+    "carpet": {
+        "color": 0,
+        "cut": 0,
+        "hole": 0,
+        "metal_contamination": 0,
+        "thread": 0
+    },
+    "grid": {
+        "bent": 0,
+        "broken": 0,
+        "glue": 0,
+        "metal_contamination": 0,
+        "thread": 0
+    },
+    "hazelnut": {
+        "crack": 0,
+        "cut": 0,
+        "hole": 0,
+        "print": 0
+    },
+    "leather": {
+        "color": 0,
+        "cut": 0,
+        "fold": 0,
+        "glue": 0,
+        "poke": 0
+    },
+    "metal_nut": {
+        "bent": 1,
+        "color": 0,
+        "flip": 0,
+        "scratch": 0
+    },
+    "pill": {
+        "color": 0,
+        "combined": 0,
+        "contamination": 0,
+        "crack": 0,
+        "faulty_imprint": 0,
+        "pill_type": 0,
+        "scratch": 0
+    },
+    "screw": {
+        "manipulated_front": 1,
+        "scratch_head": 0,
+        "scratch_neck": 0,
+        "thread_side": 0,
+        "thread_top": 0
+    },
+    "tile": {
+        "crack": 0,
+        "glue_strip": 0,
+        "gray_stroke": 0,
+        "oil": 0,
+        "rough": 0
+    },
+    "toothbrush": {
+        "defective": 1
+    },
+    "transistor": {
+        "bent_lead": 0,
+        "cut_lead": 0,
+        "damaged_case": 0,
+        "misplaced": 0
+    },
+    "wood": {
+        "color": 0,
+        "combined": 0,
+        "hole": 0,
+        "liquid": 0,
+        "scratch": 0
+    },
+    "zipper": {
+        "broken_teeth": 0,
+        "combined": 0,
+        "fabric_border": 0,
+        "fabric_interior": 0,
+        "rough": 0,
+        "split_teeth": 0,
+        "squeezed_teeth": 0
+    }
+}
