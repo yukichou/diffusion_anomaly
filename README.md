@@ -32,28 +32,6 @@ pip install -r requirements.txt
 pip install opencv-python
 ```
 
-4. Clone and set up diffusers:
-```bash
-git clone https://github.com/huggingface/diffusers.git
-cd diffusers
-pip install -e .
-```
-
-5. Add the Custom Pipeline
-
-Copy the `pipeline_stable_diffusion_inpaint_magic.py` file to the following directory:
-
-```
-diffusers/src/diffusers/pipelines/stable_diffusion/
-```
-
-Example command:
-
-```bash
-mv pipeline_stable_diffusion_inpaint_magic.py diffusers/src/diffusers/pipelines/stable_diffusion/
-```
-
-
 ## 📦 Data Preparation
 
 ### ✅ 1. Download MVTec AD Dataset
