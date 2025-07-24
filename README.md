@@ -161,15 +161,11 @@ This repository provides four evaluation scripts to assess the quality and diver
 
 ### 1. **KID Evaluation** (`cal_kid.py`)
 
-Computes the **Kernel Inception Distance (KID)** between real and generated images.
-
 ```bash
 python cal_kid.py --real_path=/path/to/mvtec_ad --generated_path=/path/to/generated_images
 ```
 
 ### 2. **IC-LPIPS Evaluation** (`cal_ic_lpips.py`)
-
-Computes the **Intra-Class LPIPS (IC-LPIPS)** to measure diversity of generated anomalies within each class.
 
 ```bash
 python cal_ic_lpips.py --mvtec_path=/path/to/mvtec_ad --gen_path=/path/to/generated_images
@@ -186,8 +182,6 @@ python train-classification.py \
 ```
 
 ### 4. **Classification Testing** (`test-classification.py`)
-
-Evaluates the classification accuracy of the model trained on generated data.
 
 ```bash
 python test-classification.py \
