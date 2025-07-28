@@ -119,11 +119,12 @@ To run inference with trained checkpoints:
 python inference.py \
   --model_ckpt_root /path/to/trained/ckpt \
   --categories screw \
+  --dataset_type mvtec \
   --text_noise_scale 1.0 \
   --defect_json /path/to/defect_classification.json \
-  --match_json /path/to/matching_output \
-  --normal_masks /path/to//obj_foreground_mask \
-  --mask_dir /path/to/anomaly_mask \
+  --match_json /path/to/matching_result.json \
+  --normal_masks /obj_foreground_mask \
+  --mask_dir /anomaly_mask \
   --anomaly_stop_step 20 \
   --CAMA \
   --base_dir /path/to/mvtec_ad \
