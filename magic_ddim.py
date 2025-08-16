@@ -150,7 +150,12 @@ class DDIMScheduler(SchedulerMixin, ConfigMixin):
     def from_pretrained(cls, scheduler_folder):
         config_path = os.path.join(scheduler_folder, "scheduler_config.json")
         if not os.path.exists(config_path):
-            raise FileNotFoundError(f"Could not find scheduler_config.json in {scheduler_folder}")
+            config_path = os.path.join(scheduler_folder, "scheduler", "scheduler_config.json")
+
+        if not os.path.exists(config_path):
+            raise FileNotFoundError(
+                f"Could not find scheduler_config.json in {scheduler_folder} or its 'scheduler' subfolder"
+            )
 
         with open(config_path, "r", encoding="utf-8") as f:
             config_dict = json.load(f)

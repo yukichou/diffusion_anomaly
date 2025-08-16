@@ -1,0 +1,19 @@
+# Datasets
+dataset/
+model/
+gen_out/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# IDE specific
+.idea/
+.vscode/
