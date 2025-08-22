@@ -37,6 +37,18 @@ check_min_version("0.13.0.dev0")
 logger = get_logger(__name__)
 
 
+def load_caption_map(xlsx_path):
+    try:
+        import pandas as pd
+    except ImportError:
+        raise ImportError("`pandas` and `openpyxl` are required for --use_ds_captions. Please install them via `pip install pandas openpyxl`")
+    cap = pd.read_excel(xlsx_path)
+    cols = {c.lower().replace(" ", "_"): c for c in cap.columns}
+    fn_col = cols.get("path") or list(cap.columns)[0]
+    cp_col = cols.get("defect_description") or list(cap.columns)[2]
+    return {str(r[fn_col]).strip().replace("\\", "/"): str(r[cp_col]).strip() for _, r in cap.iterrows()}
+
+
 def prepare_soft_mask_and_masked_image(image, mask):
     image = np.array(image.convert("RGB"))
     image = image[None].transpose(0, 3, 1, 2)
@@ -157,6 +169,9 @@ def parse_args():
         default=None,
         help="The prompt with identifier specifying the instance",
     )
+    parser.add_argument("--use_ds_captions", action="store_true", help="Whether to use captions from Defect Spectrum dataset.")
+    parser.add_argument("--ds_caption_xlsx", type=str, default=None, help="Path to the captions.xlsx file for Defect Spectrum.")
+    parser.add_argument("--instance_category", type=str, default=None, help="The category of the instance images.")
     parser.add_argument(
         "--text_noise_scale",
         type=float,
@@ -357,8 +372,14 @@ class DreamBoothDataset(Dataset):
         class_prompt=None,
         size=512,
         center_crop=False,
+        caption_map=None,
+        use_ds_captions=False,
+        instance_category=None,
     ):
         self.size = size
+        self.caption_map = caption_map
+        self.use_ds_captions = use_ds_captions
+        self.instance_category = instance_category
         self.center_crop = center_crop
         self.tokenizer = tokenizer
 
@@ -398,13 +419,22 @@ class DreamBoothDataset(Dataset):
                 transforms.CenterCrop(size) if center_crop else transforms.RandomCrop(size),
             ]
         )
+        
+        self.mask_resize_and_crop = transforms.Compose([
+            transforms.Resize(size, interpolation=transforms.InterpolationMode.NEAREST),
+            transforms.CenterCrop(size) if center_crop else transforms.RandomCrop(size),
+        ])
 
         self.image_transforms = transforms.Compose(
             [
                 transforms.ToTensor(),
-                transforms.Normalize([0.5], [0.5]),
+                transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5]),
             ]
         )
+
+        self.mask_transforms = transforms.Compose([
+            transforms.ToTensor(),
+        ])
 
     def __len__(self):
         return self._length
@@ -418,15 +448,26 @@ class DreamBoothDataset(Dataset):
         mask_image = Image.open(self.mask_images_path[index % self.num_instance_images])
         if mask_image.mode != "L":
             mask_image = mask_image.convert("L")
-        mask_image = self.image_transforms_resize_and_crop(mask_image)
+        mask_image = self.mask_resize_and_crop(mask_image)
 
         example["mask_PIL_images"] = mask_image
         example["PIL_images"] = instance_image
         example["instance_images"] = self.image_transforms(instance_image)
-        example["mask_images"] = self.image_transforms(mask_image)
+        example["mask_images"] = self.mask_transforms(mask_image)
+
+        prompt_text = self.instance_prompt
+        if self.use_ds_captions and self.caption_map is not None and self.instance_category is not None:
+            full_path = Path(self.instance_images_path[index % self.num_instance_images])
+            defect_type = full_path.parent.name
+            # Try two key formats to be robust: with and without the 'image/' path segment
+            k1 = f"{self.instance_category}/{defect_type}/{full_path.name}"
+            k2 = f"{self.instance_category}/image/{defect_type}/{full_path.name}"
+            key = k1 if k1 in self.caption_map else (k2 if k2 in self.caption_map else None)
+            if key is not None:
+                prompt_text = self.caption_map[key]
 
         example["instance_prompt_ids"] = self.tokenizer(
-            self.instance_prompt,
+            prompt_text,
             padding="do_not_pad",
             truncation=True,
             max_length=self.tokenizer.model_max_length,
@@ -466,8 +507,14 @@ class MVTecDataset_num(Dataset):
         size=512,
         center_crop=False,
         num_images=None,
+        caption_map=None,
+        use_ds_captions=False,
+        instance_category=None,
     ):
         self.size = size
+        self.caption_map = caption_map
+        self.use_ds_captions = use_ds_captions
+        self.instance_category = instance_category
         self.center_crop = center_crop
         self.tokenizer = tokenizer
 
@@ -522,12 +569,21 @@ class MVTecDataset_num(Dataset):
             ]
         )
 
+        self.mask_resize_and_crop = transforms.Compose([
+            transforms.Resize(size, interpolation=transforms.InterpolationMode.NEAREST),
+            transforms.CenterCrop(size) if center_crop else transforms.RandomCrop(size),
+        ])
+
         self.image_transforms = transforms.Compose(
             [
                 transforms.ToTensor(),
-                transforms.Normalize([0.5], [0.5]),
+                transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5]),
             ]
         )
+        
+        self.mask_transforms = transforms.Compose([
+            transforms.ToTensor(),
+        ])
 
     def __len__(self):
         return self._length
@@ -541,15 +597,26 @@ class MVTecDataset_num(Dataset):
         mask_image = Image.open(self.mask_images_path[index % self.num_instance_images])
         if mask_image.mode != "L":
             mask_image = mask_image.convert("L")
-        mask_image = self.image_transforms_resize_and_crop(mask_image)
+        mask_image = self.mask_resize_and_crop(mask_image)
 
         example["mask_PIL_images"] = mask_image
         example["PIL_images"] = instance_image
         example["instance_images"] = self.image_transforms(instance_image)
-        example["mask_images"] = self.image_transforms(mask_image)
+        example["mask_images"] = self.mask_transforms(mask_image)
+
+        prompt_text = self.instance_prompt
+        if self.use_ds_captions and self.caption_map is not None and self.instance_category is not None:
+            full_path = Path(self.instance_images_path[index % self.num_instance_images])
+            defect_type = full_path.parent.name
+            # Try two key formats to be robust: with and without the 'image/' path segment
+            k1 = f"{self.instance_category}/{defect_type}/{full_path.name}"
+            k2 = f"{self.instance_category}/image/{defect_type}/{full_path.name}"
+            key = k1 if k1 in self.caption_map else (k2 if k2 in self.caption_map else None)
+            if key is not None:
+                prompt_text = self.caption_map[key]
 
         example["instance_prompt_ids"] = self.tokenizer(
-            self.instance_prompt,
+            prompt_text,
             padding="do_not_pad",
             truncation=True,
             max_length=self.tokenizer.model_max_length,
@@ -589,8 +656,14 @@ class MVTecDataset(Dataset):
         size=512,
         center_crop=False,
         num_images=None,
+        caption_map=None,
+        use_ds_captions=False,
+        instance_category=None,
     ):
         self.size = size
+        self.caption_map = caption_map
+        self.use_ds_captions = use_ds_captions
+        self.instance_category = instance_category
         self.center_crop = center_crop
         self.tokenizer = tokenizer
 
@@ -609,10 +682,12 @@ class MVTecDataset(Dataset):
         self.instance_images_path = sorted(self.instance_data_root.iterdir(), key=extract_last_number)
         self.mask_images_path = sorted(self.mask_data_root.iterdir(), key=extract_last_number)
 
-        if self.instance_images_path:
-            num_images = len(self.instance_images_path) // 3
-            self.instance_images_path = self.instance_images_path[:num_images]
-            self.mask_images_path = self.mask_images_path[:num_images]
+        # The following block is removed as it was a temporary debugging step
+        # that truncated the dataset to 1/3 of its size.
+        # if self.instance_images_path:
+        #     num_images = len(self.instance_images_path) // 3
+        #     self.instance_images_path = self.instance_images_path[:num_images]
+        #     self.mask_images_path = self.mask_images_path[:num_images]
 
         self.num_instance_images = len(self.instance_images_path)
         self.instance_prompt = instance_prompt
@@ -641,13 +716,22 @@ class MVTecDataset(Dataset):
                 transforms.CenterCrop(size) if center_crop else transforms.RandomCrop(size),
             ]
         )
+        
+        self.mask_resize_and_crop = transforms.Compose([
+            transforms.Resize(size, interpolation=transforms.InterpolationMode.NEAREST),
+            transforms.CenterCrop(size) if center_crop else transforms.RandomCrop(size),
+        ])
 
         self.image_transforms = transforms.Compose(
             [
                 transforms.ToTensor(),
-                transforms.Normalize([0.5], [0.5]),
+                transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5]),
             ]
         )
+        
+        self.mask_transforms = transforms.Compose([
+            transforms.ToTensor(),
+        ])
 
     def __len__(self):
         return self._length
@@ -661,15 +745,26 @@ class MVTecDataset(Dataset):
         mask_image = Image.open(self.mask_images_path[index % self.num_instance_images])
         if mask_image.mode != "L":
             mask_image = mask_image.convert("L")
-        mask_image = self.image_transforms_resize_and_crop(mask_image)
+        mask_image = self.mask_resize_and_crop(mask_image)
 
         example["mask_PIL_images"] = mask_image
         example["PIL_images"] = instance_image
         example["instance_images"] = self.image_transforms(instance_image)
-        example["mask_images"] = self.image_transforms(mask_image)
+        example["mask_images"] = self.mask_transforms(mask_image)
+
+        prompt_text = self.instance_prompt
+        if self.use_ds_captions and self.caption_map is not None and self.instance_category is not None:
+            full_path = Path(self.instance_images_path[index % self.num_instance_images])
+            defect_type = full_path.parent.name
+            # Try two key formats to be robust: with and without the 'image/' path segment
+            k1 = f"{self.instance_category}/{defect_type}/{full_path.name}"
+            k2 = f"{self.instance_category}/image/{defect_type}/{full_path.name}"
+            key = k1 if k1 in self.caption_map else (k2 if k2 in self.caption_map else None)
+            if key is not None:
+                prompt_text = self.caption_map[key]
 
         example["instance_prompt_ids"] = self.tokenizer(
-            self.instance_prompt,
+            prompt_text,
             padding="do_not_pad",
             truncation=True,
             max_length=self.tokenizer.model_max_length,
@@ -708,6 +803,10 @@ class PromptDataset(Dataset):
 
 def main():
     args = parse_args()
+
+    caption_map = None
+    if args.use_ds_captions and args.ds_caption_xlsx:
+        caption_map = load_caption_map(args.ds_caption_xlsx)
     logging_dir = Path(args.output_dir, args.logging_dir)
 
     project_config = ProjectConfiguration(
@@ -829,6 +928,9 @@ def main():
             tokenizer=tokenizer,
             size=args.resolution,
             center_crop=args.center_crop,
+            caption_map=caption_map,
+            use_ds_captions=args.use_ds_captions,
+            instance_category=args.instance_category
         )
     else:
         train_dataset = DreamBoothDataset(
@@ -840,6 +942,9 @@ def main():
             tokenizer=tokenizer,
             size=args.resolution,
             center_crop=args.center_crop,
+            caption_map=caption_map,
+            use_ds_captions=args.use_ds_captions,
+            instance_category=args.instance_category,
         )
 
     def collate_fn_mask(examples):

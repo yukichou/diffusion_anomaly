@@ -2,7 +2,9 @@
 dataset/
 model/
 gen_out/
-
+gen_out_manual/
+GeoAware-SC/
+Defect_Spectrum/
 # Python cache
 __pycache__/
 *.pyc
